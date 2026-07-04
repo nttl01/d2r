@@ -8,9 +8,11 @@ pytesseract.pytesseract.tesseract_cmd = R'C:\Program Files\Tesseract-OCR\tessera
 def myOcr(pImg_name, x,y,x2,y2, pMode = "ALL" ):
     # 1. 원본 이미지 불러오기
     #img_path = 'd2r.png'
-    image = cv2.imread(pImg_name)
+    #image = cv2.imread(pImg_name)
+    cropped_image = pImg_name.crop((x,y,x2,y2))
+    cropped_image.save("cropped_after.png")
 
-    if image is None:
+    if cropped_image is None:
         print(f"❌ 이미지를 불러올 수 없습니다. 경로를 확인하세요: {pImg_name}")
         exit()
 
@@ -19,7 +21,8 @@ def myOcr(pImg_name, x,y,x2,y2, pMode = "ALL" ):
     #x2, y2 = 1908, 112
 
     # 3. 이미지 크롭 (OpenCV 행렬 연산은 [y축 범위, x축 범위] 순서입니다)
-    cropped_image = image[y:y2, x:x2]
+    #cropped_image = image[y:y2, x:x2]
+
 
     if pMode == "ALL" :
         # 4. Tesseract OCR 수행 (한글+영어 언어 지정)
@@ -36,15 +39,17 @@ def myOcr(pImg_name, x,y,x2,y2, pMode = "ALL" ):
         #특정 문자 차단 (블랙리스트)
         custom_config = r'--psm 6 -c tessedit_char_blacklist=!@#$%^&*()_+'
 
-    #text = pytesseract.image_to_string(cropped_image, lang='kor+eng', config=custom_config)
+
 
     # 5. 결과 출력
     #print(f"--- 영역 지정 완료: 좌상단({x}, {y}) ~ 우하단({x2}, {y2}) ---")
     #print(f"인식된 텍스트:\n{text.strip()}")
     #print("실행완료!")
 
+
+    """
     # 1. 크롭 이미지 내 단어 데이터 추출
-    data = pytesseract.image_to_data(cropped_image, lang='kor+eng', config=custom_config, output_type=pytesseract.Output.DICT)
+    #data = pytesseract.image_to_data(cropped_image, lang='kor+eng', config=custom_config, output_type=pytesseract.Output.DICT)
 
     print("--- 단어 단위 상대 좌표 결과 ---")
     n_boxes = len(data['text'])
@@ -62,8 +67,12 @@ def myOcr(pImg_name, x,y,x2,y2, pMode = "ALL" ):
 
         print(f"텍스트: {word} | 크롭내 위치: 좌상단({cx}, {cy}) 크기({cw}x{ch}) | 신뢰도: {data['conf'][i]}%")
 
+    return data
+    """
 
-    #return text
+    text = pytesseract.image_to_string(cropped_image, lang='kor+eng', config=custom_config)
+
+    return text
 
 
 
