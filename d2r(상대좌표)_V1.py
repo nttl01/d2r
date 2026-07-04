@@ -27,11 +27,12 @@ from PIL import ImageGrab
 # from d2r_con_sorcer import *  # 소서리스 캐릭터 설정값
 from d2r_con_worlock import *  # 워록 캐릭터 설정값
 from imp_d2r import *  # 함수 영역
+from imp_ocr import *
 
 # ===== 실행 환경 설정값 설정 (시작) ================================
 # ===== 사용자 지정 환경 설정값 설정 (시작) =====
 mPotionTime = 5  # 포션 연속 먹는 딜레이 초 간격
-posTest = 1  # posTest = 0 : 정상 동작
+posTest = 0  # posTest = 0 : 정상 동작
 #            # posTest = 1 : 좌표위치 및 색상 테스트 모드 동작
 
 # 화면 체크하는 좌표 위치 설정
@@ -115,9 +116,11 @@ mGoatmanFlag = False  # 염소인간 자동 소환 실행 여부 체크 변수
 # 용병 물약 먹기 실행 on/off 변수 초기화
 mHelperFlag = False
 
-
 # 물약 상태 문구를 1번만 출력하게 하는 변수 초기화
 pHelpMsgYN = 1
+
+# 마을명
+vill_dict = {"자매단 야영지":True, "루트 골레인":True, "쿠라스트 부두":True, "혼돈의 요새":True, "하가로스":True}
 
 # 프로그램이 실행되는 폴더 위치 조회
 try:
@@ -246,6 +249,29 @@ while True:
     cRes1 = get_cName(cRgb1)
     pEmerRes1 = get_cName(pEmerRgb1)
     yEmerRes1 = get_cName(yEmerRgb1)
+
+    #screen.save(base_path + "\\cap_ocr.png")
+
+    #우측상단 마을명 ocr
+    x, y, x2, y2 = 1750, 87, 1917, 107
+    ocr_vill_name = myOcr(screen,  x, y, x2, y2)
+
+    # hp 량 ocr
+    x, y, x2, y2 = 386, 900, 570, 926
+    aa = str(myOcr(screen, x, y, x2, y2, "NUM_ONLY"))
+    result = aa.split('/')
+    ocr_hp_curr = result[0]
+    ocr_hp_full = result[1]
+
+    # mp 량 ocr
+    x, y, x2, y2 = 1300, 900, 1570, 926
+    aaa = str(myOcr(screen, x, y, x2, y2,"NUM_ONLY"))
+    result = aaa.split('/')
+    ocr_mp_curr = result[0]
+    ocr_mp_full = result[1]
+
+    #print(" ocr ==> ",ocr_vill_name,aa,aaa)
+    print(" ocr ==> ",ocr_vill_name,aa,ocr_hp_curr,ocr_hp_full,aaa, ocr_mp_curr,ocr_mp_full)
 
     # ===== 테스트 모드 일때 처리 영역
     if posTest == 1:
