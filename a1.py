@@ -3,6 +3,7 @@
 from imp_ocr import *
 
 # img_name = "D2R_20260704_010847_inven.png"
+
 # x, y = 1792, 66
 # x2, y2 = 1908, 112
 # result = myOcr(img_name,  x, y, x2, y2)
