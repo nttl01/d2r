@@ -24,6 +24,6 @@ from imp_ocr import *
 #================================
 img_name = "name.png"
 x, y = 840, 300
-x2, y2 = 1480, 622
+x2, y2 = 1480, 622 #comment
 result = myOcr(img_name,  x, y, x2, y2)
 print(f"--- 영역 지정 완료: 좌상단({x}, {y}) ~ 우하단({x2}, {y2}) ===> {result}")
